@@ -35,6 +35,19 @@ class _CatalogoScreenState extends State<CatalogoScreen> {
     });
   }
 
+  void _removerProduto(int index) {
+    final removido = _produtos[index];
+    setState(() {
+      _produtos.removeAt(index);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text('${removido.nome} removido'),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -57,16 +70,27 @@ class _CatalogoScreenState extends State<CatalogoScreen> {
         itemCount: _produtos.length,
         itemBuilder: (context, index) {
           final produto = _produtos[index];
-          return ProdutoCard(
-            produto: produto,
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text('Item selecionado: ${produto.nome}'),
-                  duration: const Duration(seconds: 1),
-                ),
-              );
-            },
+          return Dismissible(
+            key: Key(produto.id),
+            direction: DismissDirection.endToStart,
+            background: Container(
+              color: Colors.red,
+              alignment: Alignment.centerRight,
+              padding: const EdgeInsets.only(right: 20),
+              child: const Icon(Icons.delete, color: Colors.white),
+            ),
+            onDismissed: (_) => _removerProduto(index),
+            child: ProdutoCard(
+              produto: produto,
+              onTap: () {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text('Item selecionado: ${produto.nome}'),
+                    duration: const Duration(seconds: 1),
+                  ),
+                );
+              },
+            ),
           );
         },
       ),
