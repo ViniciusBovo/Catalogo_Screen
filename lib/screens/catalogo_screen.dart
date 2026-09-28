@@ -1,19 +1,40 @@
 import 'package:flutter/material.dart';
 import '../models/produto.dart';
 import '../widgets/produto_card.dart';
+
 class CatalogoScreen extends StatefulWidget {
   const CatalogoScreen({super.key});
+
   @override
   State<CatalogoScreen> createState() => _CatalogoScreenState();
 }
+
 class _CatalogoScreenState extends State<CatalogoScreen> {
   final List<Produto> _produtos = [
-    const Produto(id: '1', nome: 'Smartphone Galaxy S24', preco: 4500.00, categoria: 'Eletrônicos', icone: 'n'),
-    const Produto(id: '2', nome: 'Notebook Dell XPS', preco: 8900.00, categoria: 'Informática', icone: 'n'),
-    const Produto(id: '3', nome: 'Fone Bluetooth Sony', preco: 1200.00, categoria: 'Áudio', icone: 'n'),
-    const Produto(id: '4', nome: 'Smartwatch Garmin', preco: 2300.00, categoria: 'Wearables', icone: 'n'),
-    const Produto(id: '5', nome: 'Teclado Mecânico RGB', preco: 450.00, categoria: 'Periféricos', icone: 'nn'),
+    const Produto(id: '1', nome: 'Smartphone Galaxy S24', preco: 4500.00, categoria: 'Eletrônicos', icone: '📱'),
+    const Produto(id: '2', nome: 'Notebook Dell XPS', preco: 8900.00, categoria: 'Informática', icone: '💻'),
+    const Produto(id: '3', nome: 'Fone Bluetooth Sony', preco: 1200.00, categoria: 'Áudio', icone: '🎧'),
+    const Produto(id: '4', nome: 'Smartwatch Garmin', preco: 2300.00, categoria: 'Wearables', icone: '⌚'),
+    const Produto(id: '5', nome: 'Teclado Mecânico RGB', preco: 450.00, categoria: 'Periféricos', icone: '⌨️'),
   ];
+
+  int _proximoId = 6;
+
+  void _adicionarProduto() {
+    setState(() {
+      _produtos.add(
+        Produto(
+          id: _proximoId.toString(),
+          nome: 'Produto $_proximoId',
+          preco: 100.0 * _proximoId,
+          categoria: 'Geral',
+          icone: '🛒',
+        ),
+      );
+      _proximoId++;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +45,10 @@ class _CatalogoScreenState extends State<CatalogoScreen> {
           Padding(
             padding: const EdgeInsets.only(right: 16.0),
             child: Center(
-              child: Text('Itens: ${_produtos.length}', style: const TextStyle(fontWeight: FontWeight.bold)),
+              child: Text(
+                'Itens: ${_produtos.length}',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              ),
             ),
           ),
         ],
@@ -45,6 +69,11 @@ class _CatalogoScreenState extends State<CatalogoScreen> {
             },
           );
         },
+      ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: _adicionarProduto,
+        tooltip: 'Adicionar produto',
+        child: const Icon(Icons.add),
       ),
     );
   }
